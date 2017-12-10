@@ -1,4 +1,4 @@
-const io = require('./index').io;
+const io = require('./index.js').io;
 
 const {
   VERIFY_USER,
@@ -12,14 +12,17 @@ const {
 } = require('../Events');
 
 const { createUser, createMessage, createChat } = require('../Factories');
+
 let connectedUsers = {};
+
+let communityChat = createChat();
 
 module.exports = function(socket) {
   // console.log('\x1bc'); //clears console
   console.log('Socket Id:' + socket.id);
-  console.log('connectedUsers: ------- ', connectedUsers);
 
   let sendMessageToChatFromUser;
+
   let sendTypingFromUser;
 
   //Verify Username
@@ -102,12 +105,12 @@ function sendMessageToChat(sender) {
 
 /*
 * Adds user to list passed in.
-* @param connectedUsers {Object} Object with key value pairs of users
+* @param userList {Object} Object with key value pairs of users
 * @param user {User} the user to added to the list.
-* @return connectedUsers {Object} Object with key value pairs of Users
+* @return userList {Object} Object with key value pairs of Users
 */
-function addUser(connectedUsers, user) {
-  let newList = Object.assign({}, connectedUsers);
+function addUser(userList, user) {
+  let newList = Object.assign({}, userList);
   newList[user.name] = user;
   return newList;
 }

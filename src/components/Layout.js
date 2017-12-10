@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
-// import io from 'socket.io-client';
 import io from 'socket.io-client';
-import { USER_CONNECTED, LOGOUT } from '../Events.js';
-import LoginFormComponent from './LoginFormComponent';
+import { USER_CONNECTED, LOGOUT } from '../Events';
+import LoginForm from './LoginForm';
 import ChatContainer from './chats/ChatContainer';
 
 const socketUrl = 'http://localhost:4000';
-
-export default class LayoutComponent extends Component {
+export default class Layout extends Component {
   constructor(props) {
     super(props);
 
@@ -21,23 +19,33 @@ export default class LayoutComponent extends Component {
     this.initSocket();
   }
 
-  //Connect to and initialize the socket to state
+  /*
+	*	Connect to and initializes the socket.
+	*/
   initSocket = () => {
-    const socket = io(socketUrl); //i set it to 4000. why am i connected to 3000/
+    const socket = io(socketUrl);
+
     socket.on('connect', () => {
-      console.log('Am I connected wtf??');
+      console.log('Connected');
     });
-    this.setState({ socket: socket });
+
+    this.setState({ socket });
   };
 
-  //sets the user obj to state
+  /*
+	* 	Sets the user property in state
+	*	@param user {id:number, name:string}
+	*/
+
   setUser = user => {
     const { socket } = this.state;
     socket.emit(USER_CONNECTED, user);
-    this.setState({ user: user });
+    this.setState({ user });
   };
 
-  //sets user state to null when logged out
+  /*
+	*	Sets the user property in state to null.
+	*/
   logout = () => {
     const { socket } = this.state;
     socket.emit(LOGOUT);
@@ -45,12 +53,12 @@ export default class LayoutComponent extends Component {
   };
 
   render() {
-    console.log('what are my state-----', this.state);
+    const { title } = this.props;
     const { socket, user } = this.state;
     return (
       <div className="container">
         {!user
-          ? <LoginFormComponent socket={socket} setUser={this.setUser} />
+          ? <LoginForm socket={socket} setUser={this.setUser} />
           : <ChatContainer socket={socket} user={user} logout={this.logout} />}
       </div>
     );

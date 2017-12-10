@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { VERIFY_USER } from '../Events';
 
-export default class LoginFormComponent extends Component {
+export default class LoginForm extends Component {
   constructor(props) {
     super(props);
 
@@ -20,24 +20,23 @@ export default class LoginFormComponent extends Component {
     }
   };
 
-  handleSubmit = event => {
-    event.preventDefault();
+  handleSubmit = e => {
+    e.preventDefault();
     const { socket } = this.props;
     const { nickname } = this.state;
     socket.emit(VERIFY_USER, nickname, this.setUser);
   };
 
-  handleChange = event => {
-    this.setState({ nickname: event.target.value });
+  handleChange = e => {
+    this.setState({ nickname: e.target.value });
   };
 
   setError = error => {
-    this.setState({ error: error });
+    this.setState({ error });
   };
 
   render() {
     const { nickname, error } = this.state;
-    console.log('my props LoginComp:', this.props);
     return (
       <div className="login">
         <form onSubmit={this.handleSubmit} className="login-form">
